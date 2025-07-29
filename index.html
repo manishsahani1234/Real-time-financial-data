@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Financial Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-gradient"></div>
+            <h1><i class="fas fa-chart-network"></i> Ultimate Financial Dashboard</h1>
+            <p class="subtitle">Real-time financial data with comprehensive analytics</p>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="stocks">Stocks</div>
+            <div class="tab" data-tab="crypto">Crypto</div>
+            <div class="tab" data-tab="forex">Forex</div>
+            <div class="tab" data-tab="commodities">Commodities</div>
+        </div>
+
+        <div class="disclaimer">
+            <p><strong>Disclaimer:</strong> Data provided for informational purposes only. We do not provide investment advice.</p>
+        </div>
+
+        <div class="controls">
+            <button class="filter-btn active" data-filter="all">
+                <i class="fas fa-layer-group"></i> All Assets
+            </button>
+            <button class="filter-btn" data-filter="gainers">
+                <i class="fas fa-arrow-trend-up"></i> Gainers
+            </button>
+            <button class="filter-btn" data-filter="losers">
+                <i class="fas fa-arrow-trend-down"></i> Losers
+            </button>
+            <button class="watchlist-btn" id="openWatchlistModal">
+                <i class="fas fa-star"></i> Watchlist
+            </button>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-crown"></i> Top Performers</h2>
+                </div>
+                <div class="asset-list" id="topPerformers">
+                    <div class="asset-skeleton skeleton"></div>
+                    <div class="asset-skeleton skeleton"></div>
+                    <div class="asset-skeleton skeleton"></div>
+                    <div class="asset-skeleton skeleton"></div>
+                    <div class="asset-skeleton skeleton"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-chart-mixed"></i> Market Overview</h2>
+                    <div class="chart-controls">
+                        <button class="time-btn active" data-range="1w">1W</button>
+                        <button class="time-btn" data-range="1m">1M</button>
+                        <button class="time-btn" data-range="3m">3M</button>
+                        <button class="time-btn" data-range="1y">1Y</button>
+                        <button class="time-btn" data-range="3y">3Y</button>
+                        <button class="time-btn" data-range="5y">5Y</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="marketChart"></canvas>
+                </div>
+                <div class="ad-container">
+                    <div class="ad-label">Trusted Financial Platform</div>
+                    <div class="ad-content">
+                        <div class="platform-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="ad-title">Yahoo Finance</h3>
+                        <p class="ad-desc">Comprehensive financial news and data</p>
+                        <a href="https://finance.yahoo.com/" target="_blank" class="ad-button">Visit Platform</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-newspaper"></i> Financial News</h2>
+                    <a class="view-all" id="viewAllNews">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="news-grid" id="newsGrid">
+                    <div class="news-skeleton skeleton"></div>
+                    <div class="news-skeleton skeleton"></div>
+                </div>
+                <div class="news-refresh">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>News auto-updates every 60 seconds</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-list-ol"></i> Market Assets</h2>
+                <span id="assetCount">Loading...</span>
+            </div>
+            <div class="asset-list" id="fullRanking">
+                <div class="asset-skeleton skeleton"></div>
+                <div class="asset-skeleton skeleton"></div>
+                <div class="asset-skeleton skeleton"></div>
+                <div class="asset-skeleton skeleton"></div>
+                <div class="asset-skeleton skeleton"></div>
+                <div class="asset-skeleton skeleton"></div>
+                <div class="asset-skeleton skeleton"></div>
+                <div class="asset-skeleton skeleton"></div>
+                <div class="asset-skeleton skeleton"></div>
+                <div class="asset-skeleton skeleton"></div>
+            </div>
+        </div>
+
+        <div class="card comparison-container">
+            <div class="comparison-header">
+                <h2 class="card-title"><i class="fas fa-chart-line"></i> Historical Comparison</h2>
+                <div class="chart-controls">
+                    <button class="time-btn active" data-range="1w">1W</button>
+                    <button class="time-btn" data-range="1m">1M</button>
+                    <button class="time-btn" data-range="3m">3M</button>
+                    <button class="time-btn" data-range="1y">1Y</button>
+                    <button class="time-btn" data-range="3y">3Y</button>
+                    <button class="time-btn" data-range="5y">5Y</button>
+                </div>
+            </div>
+            <div class="comparison-chart">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-check-circle"></i> Trusted Platforms</h2>
+            </div>
+            <div class="trusted-platforms">
+                <div class="platform-card">
+                    <div class="platform-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h3 class="platform-name">Bloomberg</h3>
+                    <p class="platform-desc">Global business and financial news</p>
+                    <a href="https://www.bloomberg.com/markets" target="_blank" class="ad-button">Visit</a>
+                </div>
+
+                <div class="platform-card">
+                    <div class="platform-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="platform-name">Reuters</h3>
+                    <p class="platform-desc">International news organization</p>
+                    <a href="https://www.reuters.com/markets/" target="_blank" class="ad-button">Visit</a>
+                </div>
+
+                <div class="platform-card">
+                    <div class="platform-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3 class="platform-name">MarketWatch</h3>
+                    <p class="platform-desc">Stock market news</p>
+                    <a href="https://www.marketwatch.com/" target="_blank" class="ad-button">Visit</a>
+                </div>
+
+                <div class="platform-card">
+                    <div class="platform-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3 class="platform-name">Investing.com</h3>
+                    <p class="platform-desc">Real-time quotes</p>
+                    <a href="https://www.investing.com/" target="_blank" class="ad-button">Visit</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="watchlist-container" id="watchlistContainer">
+            <div class="watchlist-header">
+                <h2 class="watchlist-title"><i class="fas fa-bookmark"></i> Your Watchlist</h2>
+                <span id="watchlistCount">0 assets</span>
+            </div>
+            <div id="watchlistContent">
+                <div class="watchlist-empty">
+                    <i class="fas fa-star"></i>
+                    <h3>Your watchlist is empty</h3>
+                    <p>Add assets to track them here</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="last-updated">
+            <span class="status-indicator status-live"></span>
+            <span id="updateTime">Last Updated: Loading...</span>
+        </div>
+
+    </div>
+
+    <!-- Asset Detail Modal -->
+    <div class="modal" id="assetModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="asset-detail-header">
+                <div class="asset-icon-large">
+                    <i class="fab fa-apple fa-2x"></i>
+                </div>
+                <div class="asset-detail-info">
+                    <h2>Apple Inc. (AAPL)</h2>
+                    <div class="asset-detail-price">$189.25</div>
+                    <div class="detail-change positive">+2.34%</div>
+                    <button class="watchlist-btn" id="addToWatchlist" style="margin-top: 8px;">
+                        <i class="fas fa-star"></i> Add to Watchlist
+                    </button>
+                </div>
+            </div>
+
+            <div class="chart-controls">
+                <button class="time-btn active" data-range="1w">1W</button>
+                <button class="time-btn" data-range="1m">1M</button>
+                <button class="time-btn" data-range="3m">3M</button>
+                <button class="time-btn" data-range="1y">1Y</button>
+                <button class="time-btn" data-range="3y">3Y</button>
+                <button class="time-btn" data-range="5y">5Y</button>
+            </div>
+
+            <div class="detail-chart">
+                <canvas id="detailChart"></canvas>
+            </div>
+
+            <div class="detail-stats">
+                <div class="stat-card">
+                    <div class="stat-value">$2.89T</div>
+                    <div class="stat-label">Market Cap</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">21.45</div>
+                    <div class="stat-label">P/E Ratio</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">$394.33B</div>
+                    <div class="stat-label">Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">0.24%</div>
+                    <div class="stat-label">Dividend</div>
+                </div>
+            </div>
+
+            <div class="ad-container">
+                <div class="ad-label">Trusted Financial Platform</div>
+                <div class="ad-content">
+                    <div class="platform-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="ad-title">Seeking Alpha</h3>
+                    <p class="ad-desc">Investment research</p>
+                    <a href="https://seekingalpha.com/" target="_blank" class="ad-button">Visit Platform</a>
+                </div>
+            </div>
+
+            <div class="news-section">
+                <h3><i class="fas fa-newspaper"></i> Latest News</h3>
+                <div class="news-grid">
+                    <div class="news-card">
+                        <span class="news-source">CNBC</span>
+                        <h3 class="news-title">Apple Announces Record Quarterly Earnings</h3>
+                        <p class="news-desc">Apple beats analyst expectations with strong iPhone sales.</p>
+                        <span class="news-date"><i class="far fa-clock"></i> 1 day ago</span>
+                    </div>
+                    <div class="news-card">
+                        <span class="news-source">TechCrunch</span>
+                        <h3 class="news-title">Apple Vision Pro Pre-Orders Exceed Expectations</h3>
+                        <p class="news-desc">New AR headset sees unprecedented demand.</p>
+                        <span class="news-date"><i class="far fa-clock"></i> 3 days ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All News Modal -->
+    <div class="modal" id="allNewsModal">
+        <div class="news-modal-content">
+            <span class="close-modal" id="closeNewsModal">&times;</span>
+            <h2 class="modal-title"><i class="fas fa-newspaper"></i> Financial News</h2>
+            <div class="all-news-grid" id="allNewsGrid">
+                <div class="loader">
+                    <i class="fas fa-spinner"></i>
+                    <p>Loading news articles...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Watchlist Modal -->
+    <div class="modal" id="watchlistModal">
+        <div class="watchlist-modal-content">
+            <span class="close-modal" id="closeWatchlistModal">&times;</span>
+            <h2 class="modal-title"><i class="fas fa-star"></i> Your Watchlist</h2>
+            <div class="watchlist-grid" id="watchlistModalContent">
+                <div class="loader">
+                    <i class="fas fa-spinner"></i>
+                    <p>Loading watchlist items...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
